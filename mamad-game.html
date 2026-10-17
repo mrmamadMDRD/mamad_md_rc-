@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAMAD GAME | بازی‌های رایگان آنلاین</title>
+<meta name="description" content="MAMAD GAME؛ مجموعه بازی‌های رایگان و سبک فارسی، بدون نیاز به نصب. ماشین‌سواری، مار، پازل و بازی‌های آرکیدی.">
+<meta name="theme-color" content="#071015">
+<meta name="robots" content="index,follow">
+<style>
+:root{--bg:#0b1020;--panel:#141c31;--panel2:#1b2741;--text:#edf3ff;--muted:#aab8d4;--accent:#68e0cf;--accent2:#9a8cff;--line:#2a3857}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172342 0,#0b1020 60%);color:var(--text);font-family:Tahoma,Arial,sans-serif;min-height:100vh}
+header{padding:24px 16px 18px;text-align:center;border-bottom:1px solid var(--line);background:#0b1020cc}
+.logo{font-size:clamp(26px,5vw,42px);font-weight:900;letter-spacing:-1px}.logo span{color:var(--accent)}header p{color:var(--muted);margin:10px 0 0}
+main{max-width:1100px;margin:auto;padding:22px 16px 40px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+input,select,button{font:inherit}input,select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}#search{flex:1;min-width:190px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.filters button,.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer}.filters button.active,.btn.primary{background:var(--accent);color:#07151c;border-color:var(--accent);font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:linear-gradient(145deg,var(--panel),#10182b);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;min-height:210px;box-shadow:0 8px 24px #0002}.emoji{font-size:42px}.card h2{margin:10px 0 6px;font-size:20px}.card p{color:var(--muted);line-height:1.7;margin:0 0 16px;flex:1}.tags{font-size:12px;color:var(--accent);margin-bottom:12px}.card .btn{width:100%}
+.note{color:var(--muted);font-size:13px;line-height:1.8;margin-top:22px}
+#gameArea{display:none;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:18px}#gameHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}#gameTitle{font-size:22px;font-weight:bold}#gameInfo{color:var(--muted);font-size:14px}
+canvas{display:block;background:#070c17;border:1px solid var(--line);border-radius:12px;width:100%;max-width:720px;height:auto;margin:16px auto 8px;image-rendering:pixelated;touch-action:manipulation}
+.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.controls button{min-width:52px}.hidden{display:none!important}
+#puzzleBoard{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(100%,420px);margin:18px auto} .tile{aspect-ratio:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:clamp(20px,5vw,34px);font-weight:bold;cursor:pointer;color:var(--text)}.tile.filled{background:#24485a;color:#b6fff3}
+footer{text-align:center;color:var(--muted);padding:18px;border-top:1px solid var(--line);font-size:12px}
+@media(max-width:500px){main{padding:16px 12px}.card{min-height:190px}#gameArea{padding:10px}}
+
+/* MAMAD GAME neon refresh */
+:root{--bg:#071015;--panel:#0e1d25;--panel2:#122b34;--text:#efffff;--muted:#a3c0c7;--accent:#42f5d4;--accent2:#16bfa9;--line:#1b4850}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 50% -15%,#123e43 0,#09151b 43%,#050b10 100%);background-attachment:fixed}
+.brand-header{padding:0 18px 28px;text-align:initial;border-bottom:1px solid #1b555b;background:linear-gradient(180deg,#071015f5,#071015b8)}
+.brand-wrap{max-width:1100px;margin:auto;display:flex;align-items:center;gap:14px;padding:23px 0 18px}
+.brand-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:17px;font-size:28px;background:linear-gradient(135deg,#42f5d4,#138b91);box-shadow:0 0 28px #42f5d42c}
+.brand-copy{min-width:0}.brand-copy .logo{font-size:clamp(23px,4vw,34px);font-weight:950;letter-spacing:1px;line-height:1.1;text-shadow:0 0 22px #42f5d433}
+.brand-copy .logo span{color:var(--accent)}
+.brand-copy p{margin:7px 0 0;color:var(--muted);font-size:13px}
+.online-pill{margin-right:auto;border:1px solid #24575e;border-radius:999px;padding:9px 13px;color:#c9fff5;font-size:12px;white-space:nowrap;background:#0b2429}
+.online-pill span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#42f5d4;box-shadow:0 0 10px #42f5d4;margin-left:7px}
+.hero{max-width:1100px;margin:5px auto 0;padding:26px 0 10px}
+.hero-kicker{display:inline-block;color:var(--accent);font-weight:bold;font-size:13px;letter-spacing:.3px;margin-bottom:12px}
+.hero h1{font-size:clamp(32px,6vw,58px);line-height:1.2;margin:0 0 14px;font-weight:950;letter-spacing:-1.5px}
+.hero h1 span{color:var(--accent);text-shadow:0 0 28px #42f5d42b}
+.hero>p{max-width:660px;color:#b6d0d5;font-size:clamp(14px,2vw,17px);line-height:2;margin:0}
+.hero-stats{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.hero-stats span{padding:8px 11px;border-radius:10px;background:#0c252b;border:1px solid #1b4850;color:#bdf9ee;font-size:12px}
+main{max-width:1100px;padding-top:26px}
+.toolbar input:focus,.toolbar select:focus{outline:2px solid #42f5d477;border-color:var(--accent)}
+input,select{background:#0c1a21;border-color:#1c454d}
+.filters button,.btn{transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;background:linear-gradient(145deg,#112a33,#0e2028);border-color:#1d4a52}
+.filters button:hover,.btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 7px 24px #42f5d41c}
+.filters button.active,.btn.primary{background:linear-gradient(135deg,#42f5d4,#24cdbb);color:#03201f;border-color:#42f5d4;box-shadow:0 0 20px #42f5d425}
+.grid{gap:16px}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#10232c,#09161d 80%);border:1px solid #1b414a;border-radius:20px;box-shadow:0 12px 32px #0003;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.card:before{content:"";position:absolute;top:0;right:18px;left:18px;height:2px;background:linear-gradient(90deg,transparent,#42f5d4,transparent);opacity:.65}
+.card:hover{transform:translateY(-4px);border-color:#3b9f9d;box-shadow:0 16px 36px #0005,0 0 20px #42f5d410}
+.card .emoji{filter:drop-shadow(0 0 10px #42f5d425)}
+.card h2{letter-spacing:-.3px}
+.tags{font-weight:bold}
+#gameArea{background:linear-gradient(145deg,#0e2028,#09151b);border-color:#1b4850;box-shadow:0 12px 30px #0003}
+canvas{border-color:#25565d;box-shadow:0 0 25px #42f5d40b}
+footer{border-color:#173b42;color:#91b2ba;background:#061015}
+footer:after{content:"MAMAD GAME • بازی کن، لذت ببر";display:block;color:#42f5d4;font-weight:bold;margin-top:8px;letter-spacing:.5px}
+@media(max-width:600px){.brand-header{padding:0 14px 22px}.brand-wrap{gap:10px;padding:17px 0}.brand-icon{width:44px;height:44px;border-radius:14px;font-size:23px}.online-pill{font-size:10px;padding:7px 9px}.hero{padding-top:20px}.hero h1{letter-spacing:-.8px}.hero-stats{gap:6px}.hero-stats span{font-size:11px;padding:7px 8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+</style>
+</head>
+<body>
+<header class="brand-header">
+  <div class="brand-wrap">
+    <div class="brand-icon" aria-hidden="true">🎮</div>
+    <div class="brand-copy">
+      <div class="logo">MAMAD <span>GAME</span></div>
+      <p>قلمرو بازی‌های رایگان</p>
+    </div>
+    <div class="online-pill"><span></span> رایگان · فارسی · بدون نصب</div>
+  </div>
+  <section class="hero">
+    <div class="hero-kicker">خوش اومدی به دنیای بازی</div>
+    <h1>بازی کن؛ <span>رکورد بزن!</span></h1>
+    <p>بازی‌های سبک برای لحظه‌های باحال — مستقیم داخل مرورگر، حتی روی سیستم‌های ضعیف.</p>
+    <div class="hero-stats"><span>✦ بازی‌های رایگان</span><span>✦ مناسب کامپیوترهای معمولی</span><span>✦ رابط فارسی</span></div>
+  </section>
+</header>
+<main>
+<div class="toolbar"><input id="search" placeholder="🔎 جست‌وجوی بازی..." aria-label="جست‌وجوی بازی"><select id="sort" aria-label="مرتب‌سازی"><option value="default">مرتب‌سازی: پیشنهادی</option><option value="name">نام بازی</option></select></div>
+<div class="filters" id="filters"><button class="active" data-filter="all">همه بازی‌ها</button><button data-filter="arcade">آرکید و پازل</button><button data-filter="racing">ماشینی</button><button data-filter="shooter">تیراندازی</button><button data-filter="voxel">دنیای بلوکی</button></div>
+<section class="grid" id="gameGrid"></section>
+<section id="gameArea">
+ <div id="gameHead"><div><div id="gameTitle">بازی</div><div id="gameInfo">برای شروع دکمه شروع را بزن.</div></div><button class="btn" id="backBtn">← بازگشت به فهرست</button></div>
+ <div id="canvasWrap"><canvas id="canvas" width="600" height="400" aria-label="صفحه بازی"></canvas></div>
+ <div id="puzzleBoard" class="hidden"></div>
+ <div class="controls" id="controls"></div>
+</section>
+<p class="note">این نسخه‌ی آزمایشی با HTML، CSS و JavaScript ساخته شده و فایل‌های بیرونی لازم ندارد. برای اجرای بهتر روی کامپیوترهای ضعیف، افکت‌های سنگین و کتابخانه‌های حجیم استفاده نشده است. برای انتشار عمومی، نام و دامنه را می‌توانی بعداً تغییر بدهی.</p>
+</main>
+<footer>نسخه‌ی آزمایشی بازی‌خونه · ساخته‌شده برای اجرای سبک در مرورگر</footer>
+<script>
+const games=[
+{id:'snake',name:'مار بازی',cat:'arcade',emoji:'🐍',desc:'سیب‌ها را بخور و به دیوار یا دم خودت برخورد نکن.',tag:'سبک · صفحه‌کلید'},
+{id:'snl',name:'مار و پله طلایی',cat:'arcade',emoji:'🎲',desc:'با تاس حرکت کن، از نردبون‌ها بالا برو و حواست به مارها باشد؛ بازی دونفره و رنگارنگ.',tag:'دونفره · تاس · سرگرم‌کننده'},
+{id:'puzzle',name:'پازل ۱۵',cat:'arcade',emoji:'🧩',desc:'خانه‌های شماره‌دار را مرتب کن؛ خانه خالی را جابه‌جا کن.',tag:'فکری · ماوس'},
+{id:'race',name:'مسابقه جاده',cat:'racing',emoji:'🏎️',desc:'از ماشین‌ها جاخالی بده و تا می‌توانی امتیاز بگیر.',tag:'ماشینی · صفحه‌کلید'},
+{id:'shooter',name:'دفاع فضایی',cat:'shooter',emoji:'🚀',desc:'سفینه را حرکت بده و با شلیک، دشمن‌ها را از بین ببر.',tag:'تیراندازی · صفحه‌کلید'},
+{id:'blockworld',name:'دنیای بلوکی سه‌بعدی',cat:'voxel',emoji:'🧱',desc:'یک بازی جهان‌باز شبیه ماینکرفت؛ حرکت کن، بلوک‌ها را بشکن و بلوک بگذار. برای اجرا به اینترنت و مرورگر سازگار نیاز دارد.',tag:'سه‌بعدی · WASD · اینترنت',url:'https://vincent-p-essy.github.io/minecraft-clone/'}
+];
+const grid=document.getElementById('gameGrid'),search=document.getElementById('search'),sort=document.getElementById('sort');
+let filter='all', current=null, cleanup=()=>{};
+function renderCards(){let list=games.filter(g=>(filter==='all'||g.cat===filter)&&(`${g.name} ${g.desc} ${g.tag}`).includes(search.value.trim()));if(sort.value==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'fa'));grid.innerHTML='';list.forEach(g=>{let c=document.createElement('article');c.className='card';c.innerHTML=`<div class="emoji">${g.emoji}</div><div class="tags">${g.tag}</div><h2>${g.name}</h2><p>${g.desc}</p><button class="btn primary" data-game="${g.id}">${g.url?'اجرای بازی در تب جدید ↗':'بازی کن ←'}</button>`;grid.append(c)});if(!list.length)grid.innerHTML='<p>بازی‌ای پیدا نشد؛ عبارت دیگری جست‌وجو کن.</p>'}
+document.getElementById('filters').addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.filters button').forEach(x=>x.classList.toggle('active',x===b));renderCards()});search.addEventListener('input',renderCards);sort.addEventListener('change',renderCards);
+grid.addEventListener('click',e=>{let b=e.target.closest('[data-game]');if(!b)return;const selected=games.find(g=>g.id===b.dataset.game);if(selected&&selected.url){window.open(selected.url,'_blank','noopener,noreferrer');return;}startGame(b.dataset.game)});
+const area=document.getElementById('gameArea'),canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),controls=document.getElementById('controls'),board=document.getElementById('puzzleBoard'),info=document.getElementById('gameInfo');
+function base(title,description){cleanup();current=title;document.getElementById('gameTitle').textContent=title;info.textContent=description;area.style.display='block';area.scrollIntoView({behavior:'smooth',block:'start'});controls.innerHTML='';board.classList.add('hidden');canvas.classList.remove('hidden');ctx.clearRect(0,0,canvas.width,canvas.height)}
+function addButton(label,fn,primary=false){let b=document.createElement('button');b.className='btn'+(primary?' primary':'');b.textContent=label;b.onclick=fn;controls.append(b);return b}
+function startGame(id){if(id==='snake')snake();if(id==='snl')snakesLadders();if(id==='puzzle')puzzle();if(id==='race')race();if(id==='shooter')shooter()}
+document.getElementById('backBtn').onclick=()=>{cleanup();current=null;area.style.display='none';grid.scrollIntoView({behavior:'smooth',block:'start'})};
+function snake(){base('🐍 مار بازی','با کلیدهای جهت‌دار حرکت کن؛ روی موبایل هم می‌توانی از دکمه‌ها استفاده کنی.');let cell=20,cols=30,rows=20,s=[{x:8,y:8},{x:7,y:8},{x:6,y:8}],dir={x:1,y:0},next={...dir},food={x:18,y:9},score=0,timer=null,dead=false;canvas.width=600;canvas.height=400;
+function place(){do{food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}}while(s.some(p=>p.x===food.x&&p.y===food.y))}
+function draw(){ctx.fillStyle='#070c17';ctx.fillRect(0,0,600,400);ctx.fillStyle='#1b2741';for(let x=0;x<cols;x++)for(let y=0;y<rows;y++)if((x+y)%2===0)ctx.fillRect(x*cell,y*cell,cell,cell);ctx.fillStyle='#ffcc66';ctx.fillRect(food.x*cell+3,food.y*cell+3,cell-6,cell-6);s.forEach((p,i)=>{ctx.fillStyle=i?'#42b8a8':'#9df6d9';ctx.fillRect(p.x*cell+1,p.y*cell+1,cell-2,cell-2)});info.textContent='امتیاز: '+score+(dead?' · بازی تمام شد!':'')}
+function tick(){if(dead)return;dir=next;let h={x:s[0].x+dir.x,y:s[0].y+dir.y};if(h.x<0||h.y<0||h.x>=cols||h.y>=rows||s.some(p=>p.x===h.x&&p.y===h.y)){dead=true;clearInterval(timer);draw();return}s.unshift(h);if(h.x===food.x&&h.y===food.y){score+=10;place()}else s.pop();draw()}
+function key(e){let k=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(k))e.preventDefault();if(k==='ArrowUp'&&dir.y!==1)next={x:0,y:-1};if(k==='ArrowDown'&&dir.y!==-1)next={x:0,y:1};if(k==='ArrowLeft'&&dir.x!==1)next={x:-1,y:0};if(k==='ArrowRight'&&dir.x!==-1)next={x:1,y:0}}
+window.addEventListener('keydown',key);addButton('↑',()=>{if(dir.y!==1)next={x:0,y:-1}});addButton('←',()=>{if(dir.x!==1)next={x:-1,y:0}});addButton('↓',()=>{if(dir.y!==-1)next={x:0,y:1}});addButton('→',()=>{if(dir.x!==-1)next={x:1,y:0}});addButton('شروع دوباره',snake,true);place();draw();timer=setInterval(tick,115);cleanup=()=>{clearInterval(timer);window.removeEventListener('keydown',key)}}
+function puzzle(){base('🧩 پازل ۱۵','خانه‌ها را با کلیک جابه‌جا کن تا اعداد از ۱ تا ۱۵ مرتب شوند.');canvas.classList.add('hidden');board.classList.remove('hidden');let a=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0],moves=0;function shuffle(){for(let i=0;i<160;i++){let z=a.indexOf(0),opts=[z-4,z+4];if(z%4)opts.push(z-1);if(z%4<3)opts.push(z+1);let n=opts[Math.floor(Math.random()*opts.length)];if(n>=0&&n<16&&Math.abs((n%4)-(z%4))+(Math.abs(Math.floor(n/4)-Math.floor(z/4)))===1)[a[z],a[n]]=[a[n],a[z]]}moves=0;draw()}function draw(){board.innerHTML='';a.forEach((v,i)=>{let b=document.createElement('button');b.className='tile'+(v?' filled':'');b.textContent=v||'';b.setAttribute('aria-label',v?'خانه '+v:'خانه خالی');b.onclick=()=>{let z=a.indexOf(0);if((Math.abs(z-i)===4)||(Math.floor(z/4)===Math.floor(i/4)&&Math.abs(z-i)===1)){[a[z],a[i]]=[a[i],a[z]];moves++;draw()}};board.append(b)});info.textContent='تعداد حرکت: '+moves+(a.every((v,i)=>v===(i+1)%16)?' · آفرین! حل شد 🎉':'')}addButton('به‌هم‌ریختن دوباره',shuffle,true);shuffle();cleanup=()=>{}}
+function race(){base('🏎️ مسابقه جاده','با ← و → یا A و D ماشین را حرکت بده و از برخورد دوری کن.');canvas.width=600;canvas.height=400;let x=280,obs=[],score=0,frame=0,over=false,raf=0,keys={};function key(e){if(['ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true}function up(e){keys[e.key.toLowerCase()]=false}window.addEventListener('keydown',key);window.addEventListener('keyup',up);function draw(){ctx.fillStyle='#153323';ctx.fillRect(0,0,600,400);ctx.fillStyle='#303846';ctx.fillRect(120,0,360,400);ctx.fillStyle='#f5e7b2';for(let y=-40+(frame%80);y<400;y+=80)ctx.fillRect(296,y,8,42);ctx.fillRect(135,0,5,400);ctx.fillRect(460,0,5,400);if(!over){if(keys.arrowleft||keys.a)x-=5;if(keys.arrowright||keys.d)x+=5;x=Math.max(145,Math.min(430,x));frame++;if(frame%48===0)obs.push({x:150+Math.random()*270,y:-55});obs.forEach(o=>o.y+=4+Math.min(4,score/80));obs=obs.filter(o=>o.y<430);score+=frame%5===0?1:0;for(let o of obs)if(o.y+48>320&&o.y<380&&Math.abs(o.x-x)<42)over=true}obs.forEach(o=>{ctx.fillStyle='#f26b6b';ctx.fillRect(o.x, o.y,38,55);ctx.fillStyle='#ffb4b4';ctx.fillRect(o.x+6,o.y+7,26,12)});ctx.fillStyle='#68e0cf';ctx.fillRect(x,325,40,58);ctx.fillStyle='#c5fff5';ctx.fillRect(x+6,333,28,13);ctx.fillStyle='#111';ctx.fillRect(x-4,334,5,13);ctx.fillRect(x+39,334,5,13);ctx.fillRect(x-4,365,5,13);ctx.fillRect(x+39,365,5,13);info.textContent='امتیاز: '+score+(over?' · تصادف کردی!':'');if(over){ctx.fillStyle='#000b';ctx.fillRect(0,0,600,400);ctx.fillStyle='#fff';ctx.font='bold 32px Tahoma';ctx.textAlign='center';ctx.fillText('بازی تمام شد!',300,190);ctx.font='20px Tahoma';ctx.fillText('برای تلاش دوباره روی شروع مجدد بزن',300,230)}else raf=requestAnimationFrame(draw)}addButton('←',()=>x-=28);addButton('→',()=>x+=28);addButton('شروع مجدد',race,true);draw();cleanup=()=>{cancelAnimationFrame(raf);window.removeEventListener('keydown',key);window.removeEventListener('keyup',up)}}
+function shooter(){base('🚀 دفاع فضایی','با ← و → حرکت کن و با Space شلیک کن. دشمن‌ها را رد نکن!');canvas.width=600;canvas.height=400;let px=280,shots=[],enemies=[],score=0,frame=0,over=false,raf=0,keys={};function key(e){if(['ArrowLeft','ArrowRight',' ','Spacebar'].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true}function up(e){keys[e.key.toLowerCase()]=false}window.addEventListener('keydown',key);window.addEventListener('keyup',up);function draw(){ctx.fillStyle='#070c17';ctx.fillRect(0,0,600,400);for(let i=0;i<55;i++){ctx.fillStyle='#52617c';ctx.fillRect((i*97)%600,(i*47+frame*0.7)%400,2,2)}if(!over){if(keys.arrowleft||keys.a)px-=5;if(keys.arrowright||keys.d)px+=5;px=Math.max(18,Math.min(560,px));if(keys[' ']&&frame%10===0)shots.push({x:px+10,y:330});frame++;if(frame%45===0)enemies.push({x:20+Math.random()*540,y:-20});shots.forEach(s=>s.y-=7);enemies.forEach(e=>e.y+=1.8+Math.min(2,score/100));for(let e of enemies)for(let s of shots)if(!e.dead&&s.y<e.y+20&&s.y>e.y-8&&s.x>e.x-6&&s.x<e.x+25){e.dead=true;s.dead=true;score+=10}shots=shots.filter(s=>s.y>-10&&!s.dead);enemies=enemies.filter(e=>!e.dead&&e.y<420);if(enemies.some(e=>e.y>320))over=true}shots.forEach(s=>{ctx.fillStyle='#ffe28a';ctx.fillRect(s.x,s.y,4,12)});enemies.forEach(e=>{ctx.fillStyle='#ff6f91';ctx.fillRect(e.x,e.y,24,20);ctx.fillStyle='#ffd0dc';ctx.fillRect(e.x+5,e.y+5,14,5)});ctx.fillStyle='#68e0cf';ctx.beginPath();ctx.moveTo(px+12,315);ctx.lineTo(px,345);ctx.lineTo(px+24,345);ctx.closePath();ctx.fill();info.textContent='امتیاز: '+score+(over?' · دشمن به زمین رسید!':'');if(over){ctx.fillStyle='#000b';ctx.fillRect(0,0,600,400);ctx.fillStyle='#fff';ctx.font='bold 32px Tahoma';ctx.textAlign='center';ctx.fillText('بازی تمام شد!',300,195)}else raf=requestAnimationFrame(draw)}addButton('←',()=>px-=25);addButton('شلیک ●',()=>shots.push({x:px+10,y:330}),true);addButton('→',()=>px+=25);addButton('شروع مجدد',shooter);draw();cleanup=()=>{cancelAnimationFrame(raf);window.removeEventListener('keydown',key);window.removeEventListener('keyup',up)}}
+
+function snakesLadders(){
+ base('🎲 مار و پله طلایی','نوبتی تاس بندازید! به خانه ۱۰۰ برسید تا برنده شوید.');
+ canvas.width=600;canvas.height=600;canvas.style.maxWidth='600px';
+ const ladders=[[3,22],[8,30],[20,41],[28,55],[36,57],[51,72],[71,92],[80,99]];
+ const snakes=[[17,7]];
+ snakes.push([34,12],[47,26],[62,19],[64,43],[87,66],[93,73],[98,79]);
+ let pos=[0,0],turn=0,rolling=false,won=false,last=0;
+ function cellCenter(n){let z=n-1,row=Math.floor(z/10),col=z%10;if(row%2===1)col=9-col;return {x:30+col*54+27,y:30+(9-row)*54+27}}
+ function line(a,b,color,width){let A=cellCenter(a),B=cellCenter(b);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke()}
+ function drawLadder(a,b){let A=cellCenter(a),B=cellCenter(b),dx=B.x-A.x,dy=B.y-A.y,len=Math.hypot(dx,dy),px=-dy/len*7,py=dx/len*7;ctx.strokeStyle='#8b5428';ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(A.x+px,A.y+py);ctx.lineTo(B.x+px,B.y+py);ctx.moveTo(A.x-px,A.y-py);ctx.lineTo(B.x-px,B.y-py);ctx.stroke();for(let t=.12;t<.95;t+=.18){ctx.strokeStyle='#f8d27b';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(A.x+px+(B.x-A.x)*t,A.y+py+(B.y-A.y)*t);ctx.lineTo(A.x-px+(B.x-A.x)*t,A.y-py+(B.y-A.y)*t);ctx.stroke()}}
+ function drawSnake(a,b,index){let A=cellCenter(a),B=cellCenter(b),mx=(A.x+B.x)/2+(index%2?15:-15),my=(A.y+B.y)/2;ctx.strokeStyle=index%2?'#e76f51':'#7c5ce7';ctx.lineWidth=13;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.quadraticCurveTo(mx,my,B.x,B.y);ctx.stroke();ctx.strokeStyle='#ffffff66';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.quadraticCurveTo(mx-3,my-3,B.x,B.y);ctx.stroke();ctx.fillStyle=index%2?'#ffd1a8':'#e1d8ff';ctx.beginPath();ctx.arc(A.x,A.y,9,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1b1830';ctx.beginPath();ctx.arc(A.x-3,A.y-2,1.8,0,Math.PI*2);ctx.arc(A.x+3,A.y-2,1.8,0,Math.PI*2);ctx.fill()}
+ function draw(){ctx.clearRect(0,0,600,600);let grad=ctx.createLinearGradient(0,0,600,600);grad.addColorStop(0,'#17233f');grad.addColorStop(1,'#0b1226');ctx.fillStyle=grad;ctx.fillRect(0,0,600,600);
+ for(let n=1;n<=100;n++){let {x,y}=cellCenter(n),col=(Math.floor((n-1)/10)+Math.floor((n-1)%10))%2;let g=ctx.createLinearGradient(x-25,y-25,x+25,y+25);g.addColorStop(0,col?'#f5dca0':'#bdebdc');g.addColorStop(1,col?'#e7bd70':'#7ed2bc');ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(x-25,y-25,50,50,9);ctx.fill();ctx.strokeStyle='#ffffff55';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='#17334a';ctx.font='bold 15px Tahoma';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n,x,y)}
+ ladders.forEach(([a,b])=>drawLadder(a,b));snakes.forEach(([a,b],i)=>drawSnake(a,b,i));
+ pos.forEach((n,i)=>{if(!n)return;let {x,y}=cellCenter(n);x+=(i===0?-11:11);y+=(i===0?-8:8);ctx.shadowColor=i===0?'#ff648e':'#62d9ff';ctx.shadowBlur=13;ctx.fillStyle=i===0?'#ff648e':'#62d9ff';ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 11px Tahoma';ctx.fillText(i===0?'۱':'۲',x,y+1)});
+ ctx.fillStyle='#ffffff';ctx.font='bold 18px Tahoma';ctx.textAlign='center';ctx.fillText('شروع',30,588);ctx.fillText('پایان 🏆',570,18);info.textContent=won?`بازیکن ${turn+1} برنده شد! 🎉`:`نوبت بازیکن ${turn+1}  ·  آخرین تاس: ${last||'—'}  ·  جایگاه‌ها: ${pos[0]} و ${pos[1]}`}
+ function roll(){if(rolling||won)return;rolling=true;let d=1+Math.floor(Math.random()*6);last=d;info.textContent=`🎲 تاس: ${d} ...`;setTimeout(()=>{let next=pos[turn]+d;if(next<=100){pos[turn]=next;let ladder=ladders.find(x=>x[0]===next),snake=snakes.find(x=>x[0]===next);if(ladder)pos[turn]=ladder[1];else if(snake)pos[turn]=snake[1];if(pos[turn]===100)won=true}if(!won)turn=1-turn;rolling=false;draw()},350)}
+ addButton('🎲 انداختن تاس',roll,true);addButton('شروع دوباره',snakesLadders);draw();cleanup=()=>{canvas.style.maxWidth='720px'}
+}
+
+renderCards();
+</script>
+</body></html>
